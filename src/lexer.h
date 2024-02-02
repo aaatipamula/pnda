@@ -11,13 +11,14 @@ class Lexer {
   int curr, start = 0;
   int line = 1;
 
+  // Keyword Identifier Hashmap
   const std::unordered_map<std::string, TokenType> _keywords = {
     {"and", AND},
     {"or", OR},
     {"if", IF},
     {"else", ELSE},
-    {"true", TRU},
-    {"false", FALS},
+    {"true", _TRUE},
+    {"false", _FALSE},
     {"print", PRINT},
     {"return", RETURN},
     {"for", FOR},
@@ -27,24 +28,28 @@ class Lexer {
     {"super", SUPER},
     {"self", SELF},
     {"class", CLASS},
-    {"null", NIL}
+    {"null", _NULL}
   };
 
+  // Helper Methods
   bool atEnd();
   bool find(char ch);
   bool isDigit(char ch);
   bool isAlpha(char ch);
   bool isAlphaNumeric(char ch);
 
+  // Lookahead Methods
   char advance();
   char peek();
   char peekTwo();
 
+  // Scanning Methods
   void scanString();
   void scanNumber();
   void scanIdentifier();
-  void appendToken(TokenType type, std::any literal);
 
+  // Adding tokens
+  void appendToken(TokenType type, std::any literal);
   Token scanToken();
 
   public:

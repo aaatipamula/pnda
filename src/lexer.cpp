@@ -1,7 +1,7 @@
 #include <list>
 #include <string>
 
-#include "token.h"
+#include "../token.h"
 #include "lexer.h"
 
 // Lexer constructor method
@@ -10,11 +10,13 @@ Lexer::Lexer(std::string source) {
 }
 
 /******************
- * HELPER METHODS *
+ * Helper Methods *
  ******************
  * atEnd()
  * find()
  * isDigit()
+ * isAlpha()
+ * isAlphaNumeric()
  */
 
 // Check if we are at the end of the program
@@ -53,7 +55,7 @@ bool isAlphaNumeric(char ch) {
 
 
 /*********************
- * LOOKAHEAD METHODS *
+ * Lookahead Methods *
  *********************
  * advance()
  * peek()
@@ -81,6 +83,15 @@ char Lexer::peekTwo() {
   return _source[curr + 1];
 }
 
+/********************
+ * Scanning Methods *
+ ********************
+ * scanString()
+ * scanNumber()
+ * scanIdentifier()
+ */
+
+// Scan ahead for a string literal
 void Lexer::scanString() {
   while (peek() != '"' && not(atEnd())) {
     if (peek() == '\n') {
@@ -90,7 +101,7 @@ void Lexer::scanString() {
   }
 
   if (atEnd()) {
-    // unterminated string error
+    // TODO: Throw unterminated string here
     return;
   }
 
@@ -100,6 +111,7 @@ void Lexer::scanString() {
   appendToken(STRING, literal);
 }
 
+// Scan ahead for a number literal
 void Lexer::scanNumber() {
   while (isDigit(peek())) {
     advance();
@@ -112,10 +124,11 @@ void Lexer::scanNumber() {
     }
   }
 
-  // Add a token by slicing up the substring and converting to float
+  /* Add a token by slicing up the substring and converting to float */
   appendToken(NUM, std::stod(_source.substr(start, curr + 1)));
 }
 
+// Scan ahead for a keyword identifier
 void Lexer::scanIdentifier() {
   while (isAlphaNumeric(peek())) {
     advance();
@@ -133,23 +146,26 @@ void Lexer::scanIdentifier() {
   appendToken(type, "");
 }
 
+// Add a token from a type and a given literal
 void Lexer::appendToken(TokenType type, std::any literal) {
   std::string lexeme = _source.substr(start, curr + 1);
   Token newToken(type, literal, lexeme, line);
   _tokens.push_back(newToken);
 }
 
+// Scan our source and parse tokens
 std::list<Token> Lexer::scanSource() {
   while(not(atEnd())) {
     start = curr;
     scanToken();
   }
 
-  Token EOFToken(EF, "", NULL, line);
+  Token EOFToken(_EOF, "", NULL, line);
   _tokens.push_back(EOFToken);
   return _tokens;
 }
 
+// Parse the text for our token
 Token Lexer::scanToken() {
   char c = advance();
   switch (c) {
@@ -158,7 +174,6 @@ Token Lexer::scanToken() {
     case '{': appendToken(LEFT_BRACE, ""); break;
     case '}': appendToken(RIGHT_BRACE, ""); break;
     case ',': appendToken(COMMA, ""); break;
-    case '.': appendToken(DOT, ""); break;
     case '-': appendToken(MINUS, ""); break;
     case '+': appendToken(PLUS, ""); break;
     case '*': appendToken(STAR, ""); break;
@@ -176,6 +191,7 @@ Token Lexer::scanToken() {
     case '<':
       appendToken(find('=') ? LESS_EQUAL : LESS, "");
       break;
+    // TODO: Add multiline comments
     case '/':
       if (find('/')) {
         while (peek() != '\n' && not(atEnd())) {
@@ -183,6 +199,22 @@ Token Lexer::scanToken() {
         }
       } else {
         appendToken(FORWARD_SLASH, "");
+      }
+    case '.':
+      if (isDigit(peek())) {
+        scanNumber();
+      } else {
+        appendToken(DOT, "");
+      }
+    case '\'':
+
+      // TODO: Add support for multicharacter escape sequences
+      if (peekTwo() == '\'') {
+        char literal = advance();
+        appendToken(CHAR, literal);
+        advance();
+      } else {
+        // TODO: Throw some unterminated character error
       }
     case ' ':
     case '\r':
@@ -194,10 +226,10 @@ Token Lexer::scanToken() {
     default:
       if (isDigit(c)) {
         scanNumber();
-      } else if (isAlpha(c))) {
+      } else if (isAlpha(c)) {
         scanIdentifier();
       } else {
-        // some error here
+        // TODO: Add an error throwing method from the high level program
         break;
       }
   }

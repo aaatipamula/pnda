@@ -5,25 +5,25 @@
 #include <any>
 
 enum TokenType {
-  // groupings
+  // Grouping Characters
   LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, 
 
-  // special characters
+  // Special Characters
   PLUS, MINUS, STAR, FORWARD_SLASH, DOT, COMMA, SEMICOLON,
 
-  // logical operators
+  // Logical Operators
   EXCLAMATION, EXCLAMATION_EQUAL, EQUAL, EQUAL_EQUAL,
   GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
 
-  // data types
-  STRING, NUM, IDENTIFIER,
+  // Data Types
+  STRING, NUM, CHAR, IDENTIFIER,
 
-  // keywords (TRU = TRUE, FALS = FALSE)
-  AND, OR, IF, ELSE, TRU, FALS, PRINT, RETURN, 
-  FOR, WHILE, VAR, FUNC, SUPER, SELF, CLASS, NIL,
+  // Keywords
+  AND, OR, IF, ELSE, _TRUE, _FALSE, PRINT, RETURN, 
+  FOR, WHILE, VAR, FUNC, SUPER, SELF, CLASS, _NULL,
 
-  // EOF
-  EF
+  // End of File
+  _EOF
 };
 
 std::string typeToString(TokenType type);

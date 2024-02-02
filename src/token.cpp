@@ -1,84 +1,61 @@
 #include <string>
 #include "token.h"
 
+// Helper function to turn TokenType enum into a string
 std::string typeToString(TokenType type) {
   switch(type) {
-    case LEFT_PAREN:
-      return "lparen";
-    case RIGHT_PAREN:
-      return "rparen";
-    case LEFT_BRACE:
-      return "lbrace";
-    case RIGHT_BRACE:
-      return "rbrace";
-    case PLUS:
-      return "plus";
-    case MINUS:
-      return "minus";
-    case STAR:
-      return "star";
-    case FORWARD_SLASH:
-      return "slash";
-    case DOT:
-      return "dot";
-    case COMMA:
-      return "comma";
-    case SEMICOLON:
-      return "semicolon";
-    case EXCLAMATION:
-      return "inverse";
-    case EXCLAMATION_EQUAL:
-      return "ne";
-    case EQUAL:
-      return "equals";
-    case EQUAL_EQUAL:
-      return "eq";
-    case GREATER:
-      return "gt";
-    case GREATER_EQUAL:
-      return "ge";
-    case LESS:
-      return "lt";
-    case LESS_EQUAL:
-      return "le";
-    case STRING:
-      return "string";
-    case NUM:
-      return "n";
-    case IDENTIFIER:
-      return "identifier";
-    case AND:
-      return "and";
-    case PRINT:
-      return "print";
-    case OR:
-      return "or";
-    case IF:
-      return "if";
-    case ELSE:
-      return "else";
-    case TRU:
-      return "true";
-    case FALS:
-      return "false";
-    case RETURN:
-      return "return";
-    case FOR:
-      return "for";
-    case WHILE:
-      return "while";
-    case VAR:
-      return "var";
-    case FUNC:
-      return "func";
-    case SUPER:
-      return "super";
-    case SELF:
-      return "self";
-    case NIL:
-      return "null";
-    case EF:
-      return "eof";
+
+    // Grouping Characters
+    case LEFT_PAREN: return "LEFT_PAREN";
+    case RIGHT_PAREN: return "RIGHT_PAREN";
+    case LEFT_BRACE: return "LEFT_BRACE";
+    case RIGHT_BRACE: return "RIGHT_BRACE";
+
+    // Special Characters
+    case PLUS: return "PLUS";
+    case MINUS: return "MINUS";
+    case STAR: return "STAR";
+    case FORWARD_SLASH: return "FORWARD_SLASH";
+    case DOT: return "DOT";
+    case COMMA: return "COMMA";
+    case SEMICOLON: return "SEMICOLON";
+
+    // Logical Operators
+    case EXCLAMATION: return "EXCLAMATION";
+    case EXCLAMATION_EQUAL: return "EXCLAMATION_EQUAL";
+    case EQUAL: return "EQUAL";
+    case EQUAL_EQUAL: return "EQUAL_EQUAL";
+    case GREATER: return "GREATER";
+    case GREATER_EQUAL: return "GREATER_EQUAL";
+    case LESS: return "LESS";
+    case LESS_EQUAL: return "LESS_EQUAL";
+
+    // Data Types
+    case STRING: return "STRING";
+    case NUM: return "NUM";
+    case CHAR: return "CHAR";
+    case IDENTIFIER: return "IDENTIFIER";
+
+    // Keywords
+    case AND: return "AND";
+    case OR: return "OR";
+    case IF: return "IF";
+    case ELSE: return "ELSE";
+    case _TRUE: return "TRUE";
+    case _FALSE: return "FALSE";
+    case PRINT: return "PRINT";
+    case RETURN: return "RETURN";
+    case FOR: return "FOR";
+    case WHILE: return "WHILE";
+    case VAR: return "VAR";
+    case FUNC: return "FUNC";
+    case CLASS: return "CLASS";
+    case SUPER: return "SUPER";
+    case SELF: return "SELF";
+    case _NULL: return "NULL";
+    
+    // End of file
+    case _EOF: return "_EOF";
   }
 }
 
