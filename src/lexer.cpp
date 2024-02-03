@@ -1,7 +1,7 @@
 #include <list>
 #include <string>
 
-#include "../token.h"
+#include "token.h"
 #include "lexer.h"
 
 // Lexer constructor method
