@@ -13,5 +13,5 @@ Panda is written in C++ and uses the [Crafting Interpreter's](https://craftingin
 - Garbage collected
 - Dynamically typed
 
-Look at the [Pndoc][/doc/pndoc.md] to look into syntax and structure.
+Look at the [Pndoc](/doc/pndoc.md) to look into syntax and structure.
 
