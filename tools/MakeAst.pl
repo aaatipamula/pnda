@@ -8,17 +8,31 @@ use warnings;
 use Text::Tabs;
 $tabstop = 2;
 
+# Write out a class that extends the base class
 sub defineType {
+  # Grab and store subroutine inputs
   my ($fileHandle, $baseName, $className, $fields) = @_;
   my @fieldsA = split(", ", $fields);
 
+  # Class inherits from base class
   print $fileHandle "\n\nclass $className : public $baseName {\n";
+  # Define any new class attributes that don't exist in the base class
+  foreach my $field (@fieldsA) {
+    my ($type, $name) = split(" ", $field);
+    if (!(grep(/^$name$/, ("left", "right", "oper")))) {
+      print $fileHandle expand("\t$type _$name;\n");
+    }
+  }
+  # Public methods/attributes
   print $fileHandle expand("\tpublic:\n");
+  # Write the constructor
   print $fileHandle expand("\t\t$className($fields) {\n");
+  # Instantiate each of the class attributes
   foreach my $field (@fieldsA) {
     my ($type, $name) = split(" ", $field);
     print $fileHandle expand("\t\t\t_$name = $name;\n");
   }
+  # close off the class declaration
   print $fileHandle expand("\t\t}\n");
   print $fileHandle expand("};\n");
 }
@@ -42,14 +56,12 @@ sub defineAst {
   print $fileHandle "#ifndef $upperBaseName\_H\n";
   print $fileHandle "#define $upperBaseName\_H\n\n";
   print $fileHandle "#include <any>\n";
-  print $fileHandle "#include <token.h>\n\n";
+  print $fileHandle "#include \"token.h\"\n\n";
   print $fileHandle "class $baseName {\n";
   print $fileHandle expand("\tprotected:\n");
-  print $fileHandle expand("\t\tconst $baseName *_left;\n");
-  print $fileHandle expand("\t\tconst $baseName *_right;\n");
-  print $fileHandle expand("\t\tconst $baseName *_expression;\n");
-  print $fileHandle expand("\t\tconst Token _oper;\n");
-  print $fileHandle expand("\t\tconst std::any _value;\n");
+  print $fileHandle expand("\t\t$baseName* _left;\n");
+  print $fileHandle expand("\t\t$baseName* _right;\n");
+  print $fileHandle expand("\t\tToken _oper;\n");
   print $fileHandle "};";
 
   foreach my $exprType (@exprTypes) {
@@ -57,18 +69,21 @@ sub defineAst {
     defineType($fileHandle, $baseName, $className, $fields);
   }
 
-  print $fileHandle "#endif";
+  print $fileHandle "\n#endif";
 }
 
-my $dir = "./";
+my $dir = shift @ARGV;
+
+if (not defined $dir) {
+  die "Missing ouput directory argument"
+}
 
 my $name = "Expr";
-
 my @types = (
-  "Binary : $name left, Token oper, $name right",
-  "Grouping : $name expression",
+  "Binary : $name* left, Token oper, $name* right",
+  "Grouping : $name* expression",
   "Literal : std::any value",
-  "Urnary : Token oper, $name right"
+  "Urnary : Token oper, $name* right"
 );
 
 defineAst($dir, $name, @types);
