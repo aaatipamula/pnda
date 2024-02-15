@@ -25,9 +25,9 @@ class Lexer {
     {"while", WHILE},
     {"var", VAR},
     {"func", FUNC},
+    {"class", CLASS},
     {"super", SUPER},
     {"self", SELF},
-    {"class", CLASS},
     {"null", _NULL}
   };
 
