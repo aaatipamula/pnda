@@ -1,4 +1,4 @@
-#/usr/bin/env perl
+#!/usr/bin/perl
 
 # Enforce stricter code rules and warn of deviations
 use strict;
@@ -12,29 +12,40 @@ $tabstop = 2;
 sub defineType {
   # Grab and store subroutine inputs
   my ($fileHandle, $baseName, $className, $fields) = @_;
+  $fields =~ s/$baseName/std::unique_ptr<$baseName>/g;
   my @fieldsA = split(", ", $fields);
 
   # Class inherits from base class
   print $fileHandle "\n\nclass $className : public $baseName {\n";
   # Define any new class attributes that don't exist in the base class
   foreach my $field (@fieldsA) {
-    my ($type, $name) = split(" ", $field);
-    if (!(grep(/^$name$/, ("left", "right", "oper")))) {
-      print $fileHandle expand("\t$type _$name;\n");
-    }
+    print $fileHandle expand("\t$field;\n");
   }
   # Public methods/attributes
   print $fileHandle expand("\tpublic:\n");
   # Write the constructor
-  print $fileHandle expand("\t\t$className($fields) {\n");
+  print $fileHandle expand("\t\t$className($fields)\n\t\t\t: ");
   # Instantiate each of the class attributes
-  foreach my $field (@fieldsA) {
-    my ($type, $name) = split(" ", $field);
-    print $fileHandle expand("\t\t\t_$name = $name;\n");
+  for(my $i = 0; $i < scalar(@fieldsA); $i++) {
+    my ($type, $name) = split(" ", $fieldsA[$i]);
+    my $val;
+    # If value is a unique pointer move it into the class pointer
+    if ($type eq "std::unique_ptr<$baseName>") {
+      $val = "$name(std::move($name)), ";
+    # Set values of class attributes
+    } else {
+      $val = "$name($name), ";
+    }
+    # If we are at our last class attribute remove the comma-space seperator
+    if ($i == $#fieldsA) {
+      print $fileHandle substr($val, 0, -2);
+    } else {
+      print $fileHandle $val;
+    }
   }
-  # close off the class declaration
-  print $fileHandle expand("\t\t}\n");
-  print $fileHandle expand("};\n");
+  # close off the class constructor and declaration
+  print $fileHandle " {}\n";
+  print $fileHandle "};";
 }
 
 sub defineAst {
@@ -52,38 +63,49 @@ sub defineAst {
 
   my $upperBaseName = uc $baseName;
 
-  # Write out the abstract class
+  # Setup header file and include required libraries
   print $fileHandle "#ifndef $upperBaseName\_H\n";
   print $fileHandle "#define $upperBaseName\_H\n\n";
   print $fileHandle "#include <any>\n";
+  print $fileHandle "#include <memory>\n";
+  print $fileHandle "#include <utility>\n";
   print $fileHandle "#include \"token.h\"\n\n";
+
+  # Write out the abstract class
   print $fileHandle "class $baseName {\n";
-  print $fileHandle expand("\tprotected:\n");
-  print $fileHandle expand("\t\t$baseName* _left;\n");
-  print $fileHandle expand("\t\t$baseName* _right;\n");
-  print $fileHandle expand("\t\tToken _oper;\n");
+  print $fileHandle expand("\tpublic:\n");
+  print $fileHandle expand("\t\tvirtual ~$baseName() = default;\n");
   print $fileHandle "};";
 
+  # For each class name define it
   foreach my $exprType (@exprTypes) {
     my ($className, $fields) = split(" : ", $exprType);
     defineType($fileHandle, $baseName, $className, $fields);
   }
 
-  print $fileHandle "\n#endif";
+  # Close the header file
+  print $fileHandle "\n\n#endif\n";
 }
 
-my $dir = shift @ARGV;
+################
+# MAIN PROGRAM #
+################
 
+# Grab the directory from command line args and exit if we have not found one
+my $dir = shift @ARGV;
 if (not defined $dir) {
   die "Missing ouput directory argument"
 }
 
+# Define the base class name and the subclasses we want to use
 my $name = "Expr";
 my @types = (
-  "Binary : $name* left, Token oper, $name* right",
-  "Grouping : $name* expression",
+  "Binary : $name left, Token oper, $name right",
+  "Grouping : $name expression",
   "Literal : std::any value",
-  "Urnary : Token oper, $name* right"
+  "Urnary : Token oper, $name right"
 );
 
+# Define our AST file
 defineAst($dir, $name, @types);
+

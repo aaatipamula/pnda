@@ -2,49 +2,44 @@
 #define EXPR_H
 
 #include <any>
+#include <memory>
+#include <utility>
 #include "token.h"
 
 class Expr {
-  protected:
-    Expr* _left;
-    Expr* _right;
-    Token _oper;
+  public:
+    virtual ~Expr() = default;
 };
 
 class Binary : public Expr {
+  std::unique_ptr<Expr> left;
+  Token oper;
+  std::unique_ptr<Expr> right;
   public:
-    Binary(Expr* left, Token oper, Expr* right) {
-      _left = left;
-      _oper = oper;
-      _right = right;
-    }
+    Binary(std::unique_ptr<Expr> left, Token oper, std::unique_ptr<Expr> right)
+      : left(std::move(left)), oper(oper), right(std::move(right)) {}
 };
-
 
 class Grouping : public Expr {
-  Expr* _expression;
+  std::unique_ptr<Expr> expression;
   public:
-    Grouping(Expr* expression) {
-      _expression = expression;
-    }
+    Grouping(std::unique_ptr<Expr> expression)
+      : expression(std::move(expression)) {}
 };
-
 
 class Literal : public Expr {
-  std::any _value;
+  std::any value;
   public:
-    Literal(std::any value) {
-      _value = value;
-    }
+    Literal(std::any value)
+      : value(value) {}
 };
 
-
 class Urnary : public Expr {
+  Token oper;
+  std::unique_ptr<Expr> right;
   public:
-    Urnary(Token oper, Expr* right) {
-      _oper = oper;
-      _right = right;
-    }
+    Urnary(Token oper, std::unique_ptr<Expr> right)
+      : oper(oper), right(std::move(right)) {}
 };
 
 #endif
