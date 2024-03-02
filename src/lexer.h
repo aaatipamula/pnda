@@ -31,19 +31,19 @@ class Lexer {
     {"null", _NULL}
   };
 
-  // Helper Methods
+  // Helper methods
   bool atEnd();
   bool find(char ch);
   bool isDigit(char ch);
   bool isAlpha(char ch);
   bool isAlphaNumeric(char ch);
 
-  // Lookahead Methods
+  // Lookahead methods
   char advance();
   char peek();
   char peekTwo();
 
-  // Scanning Methods
+  // Scanning methods
   void scanString();
   void scanNumber();
   void scanIdentifier();
@@ -53,6 +53,7 @@ class Lexer {
   Token scanToken();
 
   public:
+    // Attributes
     std::string _source;
     std::list<Token> _tokens;
 
