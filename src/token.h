@@ -1,42 +1,49 @@
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef _PNDA_TOKEN_H
+#define _PNDA_TOKEN_H
 
-#include <string>
-#include <any>
+typedef enum _token_type {
+  // End of File
+  EOL = 258,
 
-enum TokenType {
   // Grouping Characters
-  LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, 
+  LEFT_PAREN, RIGHT_PAREN, 
+  LEFT_BRACE, RIGHT_BRACE, 
 
   // Special Characters
-  PLUS, MINUS, STAR, FORWARD_SLASH, DOT, COMMA, SEMICOLON,
+  DOT, COMMA, SEMICOLON,
+
+  // Arethmetic Operators
+  PLUS, MINUS, STAR, FORWARD_SLASH, 
+
+  // Comparison Operators
+  LESS, LESS_EQUAL,
+  GREATER, GREATER_EQUAL, 
+  EQUAL_EQUAL, BANG_EQUAL, 
 
   // Logical Operators
-  EXCLAMATION, EXCLAMATION_EQUAL, EQUAL, EQUAL_EQUAL,
-  GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
+  BANG, L_AND, L_OR,
+
+  // Binary Operators
+  AND, OR, XOR, 
+
+  // Binds
+  IDENTIFIER, EQUAL,
 
   // Data Types
-  STRING, NUM, CHAR, IDENTIFIER,
+  INT, FLOAT, CHAR, 
+  
+  // Concrete types
+  INT_T, FLOAT_T, CHAR_T, BOOL_T,
 
   // Keywords
-  AND, OR, IF, ELSE, _TRUE, _FALSE, PRINT, RETURN, 
-  FOR, WHILE, VAR, FUNC, SUPER, SELF, CLASS, _NULL,
+  IF, ELSE, TRUE, FALSE, 
+  /* FOR, WHILE, */
+  FUNC, RETURN, LET, APP,
+} token_type;
 
-  // End of File
-  _EOF
-};
-
-std::string typeToString(TokenType type);
-
-class Token{
-  TokenType _type;
-  std::any _literal;
-  std::string _lexeme;
-  int _line;
-
-  public: 
-    Token(TokenType type, std::any literal, std::string lexeme, int line);
-    std::string toString();
-};
+/* Convert tokens to string representations and vice versa */
+char* type_to_str(token_type tok);
+token_type match_keyword(const char *str);
 
 #endif
+
