@@ -1,8 +1,9 @@
-#include "token.h"
 #include <string.h>
 
-// Helper function to turn TokenType enum into a string
-char* type_to_str(token_type type) {
+#include "token.tab.h"
+#include "parser.tab.h"
+
+char* type_to_str(int type) {
   switch(type) {
     // Grouping Characters
     case LEFT_PAREN:  return "LEFT_PAREN";
@@ -59,17 +60,16 @@ char* type_to_str(token_type type) {
     case ELSE: return "ELSE";
     case TRUE: return "TRUE";
     case FALSE: return "FALSE";
-    /* case FOR: return "FOR"; */
-    /* case WHILE: return "WHILE"; */
     case LET: return "LET";
     case FUNC: return "FUNC";
     case RETURN: return "RETURN";
-    
     case EOL: return "EOF";
   }
+
+  return "UNKNOWN";
 }
 
-token_type match_keyword(const char *str) {
+int match_keyword(const char *str) {
   if (strcmp(str, "if") == 0) {
     return IF;
   } else if (strcmp(str, "else") == 0) {
@@ -78,12 +78,9 @@ token_type match_keyword(const char *str) {
     return TRUE;
   } else if (strcmp(str, "false") == 0) {
     return FALSE;
+  /*
   } else if (strcmp(str, "return") == 0) {
     return RETURN;
-  /* } else if (strcmp(str, "for") == 0) { */
-  /*   return FOR; */
-  /* } else if (strcmp(str, "while") == 0) { */
-  /*   return WHILE; */
   } else if (strcmp(str, "let") == 0) {
     return LET;
   } else if (strcmp(str, "fn") == 0) {
@@ -96,7 +93,9 @@ token_type match_keyword(const char *str) {
     return CHAR_T;
   } else if (strcmp(str, "bool") == 0) {
     return BOOL_T;
+  */
   }
 
   return IDENTIFIER;
 }
+

@@ -16,9 +16,9 @@ typedef enum _token_type {
   PLUS, MINUS, STAR, FORWARD_SLASH, 
 
   // Comparison Operators
-  LESS, LESS_EQUAL,
-  GREATER, GREATER_EQUAL, 
   EQUAL_EQUAL, BANG_EQUAL, 
+  GREATER, GREATER_EQUAL, 
+  LESS, LESS_EQUAL,
 
   // Logical Operators
   BANG, L_AND, L_OR,
@@ -37,7 +37,6 @@ typedef enum _token_type {
 
   // Keywords
   IF, ELSE, TRUE, FALSE, 
-  /* FOR, WHILE, */
   FUNC, RETURN, LET, APP,
 } token_type;
 

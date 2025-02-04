@@ -1,10 +1,11 @@
 %option noyywrap yylineno
 
 %{
+#include <string.h>
 #include "parser.tab.h"
-#include "token.h"
+#include "token.tab.h"
 
-extern yylval;
+extern YYSTYPE yylval;
 %}
 
 %%
@@ -47,10 +48,11 @@ extern yylval;
 
 [0-9]+                 { yylval.int_val = atoi(yytext); return INT; }
 [0-9]*\.[0-9]+         { yylval.float_val = atof(yytext); return FLOAT; }
-\'([a-zA-Z0-9_])\'     { yylval.char_val = yytext[1]); return CHAR; }
+\'([a-zA-Z0-9_])\'     { yylval.char_val = yytext[1]; return CHAR; }
 
 [a-zA-Z_][a-zA-Z0-9_]* { 
-                         token_type tok = match_keyword(yytext);
+                         /* tok type should be bison token enum */
+                         int tok = match_keyword(yytext);
 
                          if (tok == IDENTIFIER) {
                            yylval.id = strdup(yytext);
@@ -62,20 +64,21 @@ extern yylval;
 . { fprintf(stderr, "Invalid lexeme: %s\n", yytext); yyterminate(); } /* Theoretically unused rule */
 %%
 
-#ifndef EBUG
-#define EBUG 0
+#ifndef EBUG_FLEX
+#define EBUG_FLEX 0
 
 #include <stdio.h>
 
 int main(int argc, char **argv) {
   FILE* fp = NULL;
 
+  // Redirect yyin if file is given
   if (argc > 1) {
     fp = fopen(argv[1], "r");
-    if (redirect) yyin = redirect;
+    if (fp) yyin = fp;
   }
 
-  TokenType tok = yylex();
+  int tok = yylex();
   while (tok != EOL) {
     switch (tok) {
       case IDENTIFIER:
@@ -93,6 +96,7 @@ int main(int argc, char **argv) {
       default:
         printf("%s\n", type_to_str(tok));
     }
+    tok = yylex();
   }
 
   if (fp != NULL) {
