@@ -6,10 +6,12 @@ extern int yyparse();
 int yylex();
 
 // TODO: More robust error messages
-void yyerror(const char *s) { fprintf(stderr, "YA FUCKED UP: %s\n", s); }
+void yyerror(const char *s) { fprintf(stderr, "ERROR: %s\n", s); }
 
 ast* prog_start;
 %}
+
+%define parse.error verbose
 
 %union {
   struct _ast_node* node;
@@ -48,13 +50,10 @@ ast* prog_start;
 %type <node>  expr binary_expr unary_expr literal
 %type <token> binop unop
 
-%start prog
+%start expr
 
 %%
-prog : expr { prog_start = $1; }
-     ;
-
-expr : binary_expr
+expr : binary_expr { prog_start = $1; }
      ;
 
 binary_expr : unary_expr binop unary_expr { $$ = create_binary($2, $1, $3); }
@@ -72,15 +71,25 @@ literal : INT   { $$ = create_int_literal(yylval.int_val); }
         | CHAR  { $$ = create_char_literal(yylval.char_val); }
         ;
 
-binop : AND | OR | XOR 
-      | L_AND | L_OR
-      | EQUAL_EQUAL | BANG_EQUAL
-      | LESS_EQUAL | LESS
-      | GREATER_EQUAL | GREATER
-      | PLUS | MINUS | STAR | FORWARD_SLASH
+binop : AND   { $$ = AND; }
+      | OR    { $$ = OR; }
+      | XOR   { $$ = XOR; }
+      | L_AND { $$ = L_AND; }
+      | L_OR  { $$ = L_OR; }
+      | EQUAL_EQUAL   { $$ = EQUAL_EQUAL; }
+      | BANG_EQUAL    { $$ = BANG_EQUAL; }
+      | LESS_EQUAL    { $$ = LESS_EQUAL; }
+      | GREATER_EQUAL { $$ = GREATER_EQUAL; }
+      | LESS    { $$ = LESS; }
+      | GREATER { $$ = GREATER; }
+      | PLUS    { $$ = PLUS; }
+      | MINUS   { $$ = MINUS; }
+      | STAR    { $$ = STAR; }
+      | FORWARD_SLASH { $$ = FORWARD_SLASH; }
       ;
 
-unop : BANG | UMINUS
+unop : BANG   { $$ = BANG; }
+     | UMINUS { $$ = UMINUS; }
      ;
 %%
 
@@ -88,6 +97,7 @@ unop : BANG | UMINUS
 #define EBUG_BISON 0
 
 int main(int argc, char **argv) {
+
   FILE* fp = NULL;
   extern FILE* yyin;
 
@@ -105,7 +115,7 @@ int main(int argc, char **argv) {
     printf("Parse failed.\n");
   }
 
-  printf("Program Start:");
+  printf("Program:\n");
   pprint_ast(prog_start, 0);
 
   if (fp != NULL) {

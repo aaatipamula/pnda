@@ -44,7 +44,7 @@ char* type_to_str(int type) {
     case INT: return "INT";
     case FLOAT: return "INT";
     case CHAR: return "CHAR";
-               //
+
     // Data Types
     case INT_T: return "TYPE(INT)";
     case FLOAT_T: return "TYPE(FLOAT)";

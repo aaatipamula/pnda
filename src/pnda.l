@@ -42,7 +42,7 @@ extern YYSTYPE yylval;
 
 "="  { return EQUAL; }
 
-<<EOF>> { return EOL; }
+<<EOF>> { return EOF; }
 
 "//".*|\/\*(.|\n)*?\*\/ /* Ignore comments */
 

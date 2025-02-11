@@ -93,8 +93,11 @@ void destroy_ast(ast *node) {
 }
 
 void pprint_ast(ast *node, unsigned int depth) {
-  printf("%d ", node->type);
-  printf("%*c%s\n", depth, ' ', type_to_str(node->type));
+  if (depth == 0) {
+    printf("%s\n", type_to_str(node->type));
+  } else {
+    printf("%*s%s\n", depth, "  ", type_to_str(node->type));
+  }
 
   if (node->left) {
     pprint_ast(node->left, depth+1);

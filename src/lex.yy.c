@@ -915,7 +915,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 #line 45 "./src/pnda.l"
-{ return EOL; }
+{ return EOF; }
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
