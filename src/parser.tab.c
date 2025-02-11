@@ -76,7 +76,7 @@ extern int yyparse();
 int yylex();
 
 // TODO: More robust error messages
-void yyerror(const char *s) { fprintf(stderr, "YA FUCKED UP: %s\n", s); }
+void yyerror(const char *s) { fprintf(stderr, "ERROR: %s\n", s); }
 
 ast* prog_start;
 
@@ -489,7 +489,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  13
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   54
+#define YYLAST   53
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  47
@@ -603,7 +603,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 static const yytype_int8 yypact[] =
 {
       -7,   -25,   -25,   -25,   -25,   -25,   -25,   -25,     2,   -25,
-      10,   -25,    -4,   -25,   -25,   -25,   -25,   -25,   -25,   -25,
+       9,   -25,    -4,   -25,   -25,   -25,   -25,   -25,   -25,   -25,
      -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,    -7,
      -25,   -25
 };
@@ -613,7 +613,7 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     8,     9,     7,    11,    10,    27,    28,     0,     2,
+       0,     8,     9,     7,    11,    10,    28,    27,     0,     2,
        4,     6,     0,     1,    16,    15,    18,    17,    22,    20,
       21,    19,    23,    24,    25,    26,    13,    14,    12,     0,
        5,     3
@@ -639,9 +639,9 @@ static const yytype_int8 yytable[] =
        1,     2,    13,     1,     2,    31,    30,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     3,
        4,     5,     3,     4,     5,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     6,     7,
-      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
-      24,    25,    26,    27,    28
+       0,     0,     6,     0,     0,     0,     0,     0,     7,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28
 };
 
 static const yytype_int8 yycheck[] =
@@ -649,16 +649,16 @@ static const yytype_int8 yycheck[] =
        7,     8,     0,     7,     8,    29,    12,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    26,
       27,    28,    26,    27,    28,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    45,    46,
-      30,    31,    32,    33,    34,    35,    36,    37,    38,    39,
-      40,    41,    42,    43,    44
+      -1,    -1,    39,    -1,    -1,    -1,    -1,    -1,    45,    30,
+      31,    32,    33,    34,    35,    36,    37,    38,    39,    40,
+      41,    42,    43,    44
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     7,     8,    26,    27,    28,    45,    46,    48,    49,
+       0,     7,     8,    26,    27,    28,    39,    45,    48,    49,
       50,    51,    53,     0,    30,    31,    32,    33,    34,    35,
       36,    37,    38,    39,    40,    41,    42,    43,    44,    52,
       51,    50
@@ -1424,7 +1424,7 @@ yyreduce:
 
   case 5: /* unary_expr: unop literal  */
 #line 63 "./src/pnda.y"
-                                       { (yyval.node) = create_unary((yyvsp[-1].token), (yyvsp[0].node)); }
+                          { (yyval.node) = create_unary((yyvsp[-1].token), (yyvsp[0].node)); }
 #line 1429 "./src/parser.tab.c"
     break;
 
@@ -1550,13 +1550,13 @@ yyreduce:
 
   case 27: /* unop: BANG  */
 #line 91 "./src/pnda.y"
-            { (yyval.token) = BANG; }
+              { (yyval.token) = BANG; }
 #line 1555 "./src/parser.tab.c"
     break;
 
-  case 28: /* unop: UMINUS  */
+  case 28: /* unop: MINUS  */
 #line 92 "./src/pnda.y"
-              { (yyval.token) = UMINUS; }
+              { (yyval.token) = MINUS; }
 #line 1561 "./src/parser.tab.c"
     break;
 

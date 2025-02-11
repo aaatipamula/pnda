@@ -60,7 +60,7 @@ binary_expr : unary_expr binop unary_expr { $$ = create_binary($2, $1, $3); }
             | unary_expr
             ;
 
-unary_expr : unop literal %prec UMINUS { $$ = create_unary($1, $2); }
+unary_expr : unop literal { $$ = create_unary($1, $2); }
            | literal
            ;
 
@@ -89,7 +89,7 @@ binop : AND   { $$ = AND; }
       ;
 
 unop : BANG   { $$ = BANG; }
-     | UMINUS { $$ = UMINUS; }
+     | MINUS  { $$ = MINUS; }
      ;
 %%
 

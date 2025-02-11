@@ -6,6 +6,7 @@
 #include "token.tab.h"
 
 extern YYSTYPE yylval;
+int last_token = 0; // Store last parsed token
 %}
 
 %%
@@ -79,7 +80,7 @@ int main(int argc, char **argv) {
   }
 
   int tok = yylex();
-  while (tok != EOL) {
+  while (tok != EOF) {
     switch (tok) {
       case IDENTIFIER:
         printf("IDENTIFIER: %s\n", yylval.id);

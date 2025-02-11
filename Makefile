@@ -14,16 +14,20 @@ BIN_DIR := bin
 
 # Source files
 C_SOURCES := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(LIB_DIR)/*.c)
-CPP_SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
 LEX_SOURCES := $(wildcard $(SRC_DIR)/*.l)
 YACC_SOURCES := $(wildcard $(SRC_DIR)/*.y)
 
+# Generated files
+LEX_C := $(SRC_DIR)/lex.yy.c
+YACC_C := $(SRC_DIR)/parser.tab.c
+YACC_H := $(SRC_DIR)/parser.tab.h
+
 # Object files
 C_OBJS := $(patsubst %.c, $(BUILD_DIR)/%.o, $(notdir $(C_SOURCES)))
-LEX_OBJS := $(patsubst %.l, $(BUILD_DIR)/%.o, $(notdir $(LEX_SOURCES)))
-YACC_OBJS := $(patsubst %.y, $(BUILD_DIR)/%.o, $(notdir $(YACC_SOURCES)))
+LEX_OBJ := $(BUILD_DIR)/lex.yy.o
+YACC_OBJ := $(BUILD_DIR)/parser.tab.o
 
-OBJS := $(C_OBJS) $(LEX_OBJS) $(YACC_OBJS)
+OBJS := $(C_OBJS) $(LEX_OBJ) $(YACC_OBJ)
 
 # Executable
 TARGET := $(BIN_DIR)/pnda
@@ -48,40 +52,35 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: $(LIB_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile Flex (Lex) files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.l | $(BUILD_DIR)
-	flex -o $(BUILD_DIR)/$*.c $<
-	$(CC) $(CFLAGS) -c $(BUILD_DIR)/$*.c -o $@
+# Generate and compile Flex file (lex.yy.c)
+$(LEX_C): $(LEX_SOURCE)
+	flex -o $(LEX_C) $<
 
-# Compile Bison (Yacc) files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.y | $(BUILD_DIR)
-	bison -d -o $(BUILD_DIR)/$*.c $<
-	$(CC) $(CFLAGS) -c $(BUILD_DIR)/$*.c -o $@
+# Generate and compile Bison files (parser.tab.c, parser.tab.h)
+$(YACC_C) $(YACC_H): $(YACC_SOURCE)
+	bison -d -o $(YACC_C) $<
+
+# Compile Flex file (lex.yy.c)
+$(LEX_OBJ): $(LEX_C) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $(LEX_C) -o $(LEX_OBJ)
+
+# Compile Bison file (parser.tab.c, parser.tab.h)
+$(YACC_OBJ): $(YACC_C) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $(YACC_C) -o $(YACC_OBJ)
 
 # Link everything
 $(TARGET): $(BIN_DIR) $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $(TARGET)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
-bison:
-	bison -d -o ./src/parser.tab.c ./src/pnda.y
-
-flex: bison
-	flex -o ./src/lex.yy.c ./src/pnda.l
-
-test_bins: flex
+test_bins: $(BIN_DIR) $(LEX_C) $(YACC_C)
 	@echo "Generating test binaries..."
-	${CC} -DEBUG_FLEX ./src/parser.tab.c ./src/token.tab.c ./src/lex.yy.c ./src/ast.c -o debug_parse
-	${CC} -DEBUG_BISON ./src/parser.tab.c ./src/token.tab.c ./src/lex.yy.c ./src/ast.c -o debug_lex
+	$(CC) $(CFLAGS) -DEBUG_FLEX $(LEX_C) $(YACC_C) ./src/token.tab.c ./src/ast.c -o $(BIN_DIR)/debug_parse
+	$(CC) $(CFLAGS) -DEBUG_BISON $(LEX_C) $(YACC_C) ./src/token.tab.c ./src/ast.c -o $(BIN_DIR)/debug_lex
 
-test: flex
-	./debug_lex test.pd | tee _test_lexer.out
-	./debug_parse test.pd | tee _test_parser.out
+test: test_bins
+	@echo "Testing..."
 
 # Clean build files
 clean:
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
-
-	@if [ -f ./debug_lex || -f ./src/debug_parse ]; then \
-		rm -v ./debug_parse ./debug_lex;  \
-	fi
 
