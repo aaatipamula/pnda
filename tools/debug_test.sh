@@ -8,11 +8,14 @@ fi
 prog=$1
 
 for file in $(ls ./tests); do
-  $prog file > /dev/null 2>&1
+  echo "Running: $prog $file"
+  $prog ./tests/$file > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
-    echo "ERROR: Failed test on ${file}"
+    echo "FAILED test on ${file}"
     exit $?
   fi
 done
+
+echo "Tests PASSED"
 

@@ -94,7 +94,7 @@ unop : BANG   { $$ = BANG; }
 %%
 
 #ifndef EBUG_BISON
-#define EBUG_BISON 0
+#define EBUG_BISON
 
 int main(int argc, char **argv) {
 
@@ -109,14 +109,12 @@ int main(int argc, char **argv) {
 
   // Parse the input
   if (yyparse() == 0) {
-    // NOTE: Eventually pretty print the AST
-    printf("Parse successful.\n");
+    printf("Program:\n");
+    pprint_ast(prog_start, 0);
   } else {
     printf("Parse failed.\n");
   }
 
-  printf("Program:\n");
-  pprint_ast(prog_start, 0);
 
   if (fp != NULL) {
     fclose(fp);

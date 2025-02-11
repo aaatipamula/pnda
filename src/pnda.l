@@ -66,7 +66,7 @@ int last_token = 0; // Store last parsed token
 %%
 
 #ifndef EBUG_FLEX
-#define EBUG_FLEX 0
+#define EBUG_FLEX
 
 #include <stdio.h>
 

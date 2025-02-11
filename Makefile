@@ -79,6 +79,8 @@ test_bins: $(BIN_DIR) $(LEX_C) $(YACC_C)
 
 test: test_bins
 	@echo "Testing..."
+	./tools/debug_test.sh $(BIN_DIR)/debug_parse
+	./tools/debug_test.sh $(BIN_DIR)/debug_lex
 
 # Clean build files
 clean:
