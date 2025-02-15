@@ -1,6 +1,6 @@
-#line 2 "./src/lex.yy.c"
+#line 2 "src/lex.yy.c"
 
-#line 4 "./src/lex.yy.c"
+#line 4 "src/lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -374,8 +374,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 32
-#define YY_END_OF_BUFFER 33
+#define YY_NUM_RULES 31
+#define YY_END_OF_BUFFER 32
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -385,11 +385,11 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[47] =
     {   0,
-        0,    0,   33,   31,    1,    1,   19,   22,   31,    2,
-        3,   10,    9,    7,   11,    6,   12,   27,    8,   17,
-       25,   15,   30,   24,    4,   23,    5,   13,   20,    0,
-       28,    0,   26,    0,   27,   18,   14,   16,   30,   21,
-       29,    0,    0,   26,   26,    0
+        0,    0,   32,   30,    1,    1,   18,   21,   30,    2,
+        3,    9,    8,    6,   10,   30,   11,   26,    7,   16,
+       24,   14,   29,   23,    4,   22,    5,   12,   19,    0,
+       27,    0,   25,    0,   26,   17,   13,   15,   29,   20,
+       28,    0,    0,   25,   25,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -474,10 +474,10 @@ static const flex_int16_t yy_chk[81] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[33] =
+static const flex_int32_t yy_rule_can_match_eol[32] =
     {   0,
 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -493,16 +493,16 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "./src/pnda.l"
-#line 4 "./src/pnda.l"
+#line 1 "src/pnda.l"
+#line 4 "src/pnda.l"
 #include <string.h>
 #include "parser.tab.h"
 #include "token.tab.h"
 
 extern YYSTYPE yylval;
 int last_token = 0; // Store last parsed token
-#line 505 "./src/lex.yy.c"
-#line 506 "./src/lex.yy.c"
+#line 505 "src/lex.yy.c"
+#line 506 "src/lex.yy.c"
 
 #define INITIAL 0
 
@@ -719,9 +719,9 @@ YY_DECL
 		}
 
 	{
-#line 12 "./src/pnda.l"
+#line 12 "src/pnda.l"
 
-#line 725 "./src/lex.yy.c"
+#line 725 "src/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -791,157 +791,152 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 13 "./src/pnda.l"
+#line 13 "src/pnda.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 15 "./src/pnda.l"
+#line 15 "src/pnda.l"
 { return LEFT_PAREN; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 16 "./src/pnda.l"
+#line 16 "src/pnda.l"
 { return RIGHT_PAREN; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 17 "./src/pnda.l"
+#line 17 "src/pnda.l"
 { return LEFT_BRACE; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 18 "./src/pnda.l"
+#line 18 "src/pnda.l"
 { return RIGHT_BRACE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 20 "./src/pnda.l"
-{ return DOT; }
+#line 20 "src/pnda.l"
+{ return COMMA; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 21 "./src/pnda.l"
-{ return COMMA; }
+#line 21 "src/pnda.l"
+{ return SEMICOLON; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 22 "./src/pnda.l"
-{ return SEMICOLON; }
+#line 23 "src/pnda.l"
+{ return PLUS; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 24 "./src/pnda.l"
-{ return PLUS; }
+#line 24 "src/pnda.l"
+{ return STAR; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 25 "./src/pnda.l"
-{ return STAR; }
+#line 25 "src/pnda.l"
+{ return MINUS; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 26 "./src/pnda.l"
-{ return MINUS; }
+#line 26 "src/pnda.l"
+{ return FORWARD_SLASH; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 27 "./src/pnda.l"
-{ return FORWARD_SLASH; }
+#line 28 "src/pnda.l"
+{ return BANG_EQUAL; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 29 "./src/pnda.l"
-{ return BANG_EQUAL; }
+#line 29 "src/pnda.l"
+{ return EQUAL_EQUAL; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 30 "./src/pnda.l"
-{ return EQUAL_EQUAL; }
+#line 30 "src/pnda.l"
+{ return GREATER; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 31 "./src/pnda.l"
-{ return GREATER; }
+#line 31 "src/pnda.l"
+{ return GREATER_EQUAL; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 32 "./src/pnda.l"
-{ return GREATER_EQUAL; }
+#line 32 "src/pnda.l"
+{ return LESS; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 33 "./src/pnda.l"
-{ return LESS; }
+#line 33 "src/pnda.l"
+{ return LESS_EQUAL; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 34 "./src/pnda.l"
-{ return LESS_EQUAL; }
+#line 35 "src/pnda.l"
+{ return BANG; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 36 "./src/pnda.l"
-{ return BANG; }
+#line 36 "src/pnda.l"
+{ return L_AND; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 37 "./src/pnda.l"
-{ return L_AND; }
+#line 37 "src/pnda.l"
+{ return L_OR; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 38 "./src/pnda.l"
-{ return L_OR; }
+#line 39 "src/pnda.l"
+{ return AND; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 40 "./src/pnda.l"
-{ return AND; }
+#line 40 "src/pnda.l"
+{ return OR; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 41 "./src/pnda.l"
-{ return OR; }
+#line 41 "src/pnda.l"
+{ return XOR; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 42 "./src/pnda.l"
-{ return XOR; }
-	YY_BREAK
-case 25:
-YY_RULE_SETUP
-#line 44 "./src/pnda.l"
+#line 43 "src/pnda.l"
 { return EQUAL; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 46 "./src/pnda.l"
+#line 45 "src/pnda.l"
 { return EOF; }
 	YY_BREAK
-case 26:
-/* rule 26 can match eol */
+case 25:
+/* rule 25 can match eol */
 YY_RULE_SETUP
-#line 48 "./src/pnda.l"
+#line 47 "src/pnda.l"
 /* Ignore comments */
+	YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 49 "src/pnda.l"
+{ yylval.int_val = atoi(yytext); return INT; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 50 "./src/pnda.l"
-{ yylval.int_val = atoi(yytext); return INT; }
+#line 50 "src/pnda.l"
+{ yylval.float_val = atof(yytext); return FLOAT; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 51 "./src/pnda.l"
-{ yylval.float_val = atof(yytext); return FLOAT; }
+#line 51 "src/pnda.l"
+{ yylval.char_val = yytext[1]; return CHAR; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 52 "./src/pnda.l"
-{ yylval.char_val = yytext[1]; return CHAR; }
-	YY_BREAK
-case 30:
-YY_RULE_SETUP
-#line 54 "./src/pnda.l"
+#line 53 "src/pnda.l"
 { 
                          /* tok type should be bison token enum */
                          int tok = match_keyword(yytext);
@@ -953,17 +948,17 @@ YY_RULE_SETUP
                          return tok;
                        }
 	YY_BREAK
-case 31:
+case 30:
 YY_RULE_SETUP
-#line 65 "./src/pnda.l"
+#line 64 "src/pnda.l"
 { fprintf(stderr, "Invalid lexeme: %s\n", yytext); yyterminate(); } /* Theoretically unused rule */
 	YY_BREAK
-case 32:
+case 31:
 YY_RULE_SETUP
-#line 66 "./src/pnda.l"
+#line 65 "src/pnda.l"
 ECHO;
 	YY_BREAK
-#line 967 "./src/lex.yy.c"
+#line 962 "src/lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1978,11 +1973,11 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 66 "./src/pnda.l"
+#line 65 "src/pnda.l"
 
 
 #ifndef EBUG_FLEX
-#define EBUG_FLEX 0
+#define EBUG_FLEX
 
 #include <stdio.h>
 

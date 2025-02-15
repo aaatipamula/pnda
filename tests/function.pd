@@ -1,0 +1,4 @@
+bool fn (a int) {
+  let x = 15 - 5;
+  x + 34;
+}

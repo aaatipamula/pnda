@@ -32,10 +32,7 @@ ast* prog_start;
 %token <token> FUNC LET APP
 %token <token> SEQ
 
-%token <int_val> INT
-%token <char_val> CHAR
-%token <float_val> FLOAT
-%token <id> IDENTIFIER
+%token <node> INT CHAR FLOAT IDENTIFIER
 
 %left  <token> L_OR
 %left  <token> L_AND
@@ -47,23 +44,22 @@ ast* prog_start;
 %left  <token> AND
 %right <token> BANG UMINUS
 
-%type <node>  expr binary_expr unary_expr literal 
-%type <node>  fn_expr fn_arg block decls let_stmt
-%type <token> binop unop
+%type <node>  expr if_expr binary_expr unary_expr literal 
+%type <node>  fn_expr fn_args block decls decl let_stmt
+%type <token> binop unop concrete_type
 
-%start expr
+%start prog
 
 %%
 prog : decls { prog_start = $1; }
      ;
 
-decls : decl
-      | { $$ = NULL; } // Empty
+decls : { $$ = NULL; }
       | decls decl { $$ = create_binary(SEQ, $1, $2); }
       ;
 
 decl : let_stmt | fn_expr
-     | expr SEMICOLON { $$ = $1 }
+     | expr SEMICOLON { $$ = $1; }
      ;
 
 let_stmt : LET IDENTIFIER EQUAL expr SEMICOLON { $$ = create_let($2, $4); }
@@ -73,7 +69,7 @@ fn_expr : concrete_type FUNC LEFT_PAREN fn_args RIGHT_PAREN block { $$ = close_f
         ;
 
 fn_args : IDENTIFIER concrete_type { $$ = create_function_arg($1, $2); }
-        | fn_arg COMMA IDENTIFIER concrete_type { $$ = add_function_arg($1, $3, $4); }
+        | fn_args COMMA IDENTIFIER concrete_type { $$ = add_function_arg($1, $3, $4); }
         ;
 
 concrete_type : INT_T   { $$ = INT_T; }

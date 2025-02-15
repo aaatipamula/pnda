@@ -62,42 +62,38 @@ extern int yydebug;
     FALSE = 263,                   /* FALSE  */
     LEFT_BRACE = 264,              /* LEFT_BRACE  */
     RIGHT_BRACE = 265,             /* RIGHT_BRACE  */
-    DOT = 266,                     /* DOT  */
-    COMMA = 267,                   /* COMMA  */
-    SEMICOLON = 268,               /* SEMICOLON  */
-    EQUAL = 269,                   /* EQUAL  */
-    INT_T = 270,                   /* INT_T  */
-    FLOAT_T = 271,                 /* FLOAT_T  */
-    CHAR_T = 272,                  /* CHAR_T  */
-    BOOL_T = 273,                  /* BOOL_T  */
-    FUNC = 274,                    /* FUNC  */
-    RETURN = 275,                  /* RETURN  */
-    LET = 276,                     /* LET  */
-    APP = 277,                     /* APP  */
-    FOR = 278,                     /* FOR  */
-    WHILE = 279,                   /* WHILE  */
-    EOL = 280,                     /* EOL  */
-    INT = 281,                     /* INT  */
-    CHAR = 282,                    /* CHAR  */
-    FLOAT = 283,                   /* FLOAT  */
-    IDENTIFIER = 284,              /* IDENTIFIER  */
-    L_OR = 285,                    /* L_OR  */
-    L_AND = 286,                   /* L_AND  */
-    BANG_EQUAL = 287,              /* BANG_EQUAL  */
-    EQUAL_EQUAL = 288,             /* EQUAL_EQUAL  */
-    GREATER = 289,                 /* GREATER  */
-    GREATER_EQUAL = 290,           /* GREATER_EQUAL  */
-    LESS = 291,                    /* LESS  */
-    LESS_EQUAL = 292,              /* LESS_EQUAL  */
-    PLUS = 293,                    /* PLUS  */
-    MINUS = 294,                   /* MINUS  */
-    STAR = 295,                    /* STAR  */
-    FORWARD_SLASH = 296,           /* FORWARD_SLASH  */
-    OR = 297,                      /* OR  */
-    XOR = 298,                     /* XOR  */
-    AND = 299,                     /* AND  */
-    BANG = 300,                    /* BANG  */
-    UMINUS = 301                   /* UMINUS  */
+    COMMA = 266,                   /* COMMA  */
+    SEMICOLON = 267,               /* SEMICOLON  */
+    EQUAL = 268,                   /* EQUAL  */
+    INT_T = 269,                   /* INT_T  */
+    FLOAT_T = 270,                 /* FLOAT_T  */
+    CHAR_T = 271,                  /* CHAR_T  */
+    BOOL_T = 272,                  /* BOOL_T  */
+    FUNC = 273,                    /* FUNC  */
+    LET = 274,                     /* LET  */
+    APP = 275,                     /* APP  */
+    SEQ = 276,                     /* SEQ  */
+    INT = 277,                     /* INT  */
+    CHAR = 278,                    /* CHAR  */
+    FLOAT = 279,                   /* FLOAT  */
+    IDENTIFIER = 280,              /* IDENTIFIER  */
+    L_OR = 281,                    /* L_OR  */
+    L_AND = 282,                   /* L_AND  */
+    BANG_EQUAL = 283,              /* BANG_EQUAL  */
+    EQUAL_EQUAL = 284,             /* EQUAL_EQUAL  */
+    GREATER = 285,                 /* GREATER  */
+    GREATER_EQUAL = 286,           /* GREATER_EQUAL  */
+    LESS = 287,                    /* LESS  */
+    LESS_EQUAL = 288,              /* LESS_EQUAL  */
+    PLUS = 289,                    /* PLUS  */
+    MINUS = 290,                   /* MINUS  */
+    STAR = 291,                    /* STAR  */
+    FORWARD_SLASH = 292,           /* FORWARD_SLASH  */
+    OR = 293,                      /* OR  */
+    XOR = 294,                     /* XOR  */
+    AND = 295,                     /* AND  */
+    BANG = 296,                    /* BANG  */
+    UMINUS = 297                   /* UMINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -106,16 +102,17 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "./src/pnda.y"
+#line 16 "src/pnda.y"
 
-  struct _ast_node* node;
+  struct _ast_node *node;
+  struct _func_arg *arg;
   int int_val;
   float float_val;
   char char_val;
   char* id;
   int token; // token type enum
 
-#line 119 "./src/parser.tab.h"
+#line 116 "src/parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

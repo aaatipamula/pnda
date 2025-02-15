@@ -53,11 +53,11 @@ $(BUILD_DIR)/%.o: $(LIB_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Generate and compile Flex file (lex.yy.c)
-$(LEX_C): $(LEX_SOURCE)
+$(LEX_C): $(LEX_SOURCES)
 	flex -o $(LEX_C) $<
 
 # Generate and compile Bison files (parser.tab.c, parser.tab.h)
-$(YACC_C) $(YACC_H): $(YACC_SOURCE)
+$(YACC_C) $(YACC_H): $(YACC_SOURCES)
 	bison -d -o $(YACC_C) $<
 
 # Compile Flex file (lex.yy.c)
@@ -79,8 +79,8 @@ test_bins: $(BIN_DIR) $(LEX_C) $(YACC_C)
 
 test: test_bins
 	@echo "Testing..."
-	@./tools/debug_test.sh $(BIN_DIR)/debug_parse
 	@./tools/debug_test.sh $(BIN_DIR)/debug_lex
+	@./tools/debug_test.sh $(BIN_DIR)/debug_parse
 
 # Clean build files
 clean:
