@@ -14,7 +14,8 @@ ast* prog_start;
 %define parse.error verbose
 
 %union {
-  struct _ast_node* node;
+  struct _ast_node *node;
+  struct _func_arg *arg;
   int int_val;
   float float_val;
   char char_val;
@@ -25,12 +26,11 @@ ast* prog_start;
 %token <token> LEFT_PAREN RIGHT_PAREN 
 %token <token> IF ELSE TRUE FALSE 
 %token <token> LEFT_BRACE RIGHT_BRACE 
-%token <token> DOT COMMA SEMICOLON
+%token <token> COMMA SEMICOLON
 %token <token> EQUAL
 %token <token> INT_T FLOAT_T CHAR_T BOOL_T
-%token <token> FUNC RETURN LET APP
-%token <token> FOR WHILE
-%token <token> EOL
+%token <token> FUNC LET APP
+%token <token> SEQ
 
 %token <int_val> INT
 %token <char_val> CHAR
@@ -47,29 +47,60 @@ ast* prog_start;
 %left  <token> AND
 %right <token> BANG UMINUS
 
-%type <node>  expr binary_expr unary_expr literal
+%type <node>  expr binary_expr unary_expr literal 
+%type <node>  fn_expr fn_arg block decls let_stmt
 %type <token> binop unop
 
 %start expr
 
 %%
-expr : binary_expr { prog_start = $1; }
+prog : decls { prog_start = $1; }
      ;
 
-binary_expr : unary_expr binop unary_expr { $$ = create_binary($2, $1, $3); }
-            | unary_expr
-            ;
+decls : decl
+      | { $$ = NULL; } // Empty
+      | decls decl { $$ = create_binary(SEQ, $1, $2); }
+      ;
 
-unary_expr : unop literal { $$ = create_unary($1, $2); }
-           | literal
+decl : let_stmt | fn_expr
+     | expr SEMICOLON { $$ = $1 }
+     ;
+
+let_stmt : LET IDENTIFIER EQUAL expr SEMICOLON { $$ = create_let($2, $4); }
+         ;
+
+fn_expr : concrete_type FUNC LEFT_PAREN fn_args RIGHT_PAREN block { $$ = close_function($4, $1, $6); }
+        ;
+
+fn_args : IDENTIFIER concrete_type { $$ = create_function_arg($1, $2); }
+        | fn_arg COMMA IDENTIFIER concrete_type { $$ = add_function_arg($1, $3, $4); }
+        ;
+
+concrete_type : INT_T   { $$ = INT_T; }
+              | FLOAT_T { $$ = FLOAT_T; }
+              | CHAR_T  { $$ = CHAR_T; }
+              | BOOL_T  { $$ = BOOL_T; }
+              ;
+
+block : LEFT_BRACE decls RIGHT_BRACE { $$ = $2; }
+
+expr : if_expr | binary_expr | unary_expr | literal
+     | LEFT_PAREN expr RIGHT_PAREN { $$ = $2; }
+     | fn_expr expr { $$ = create_binary(APP, $1, $2); }
+     ;
+
+if_expr : IF LEFT_PAREN expr RIGHT_PAREN expr ELSE expr { $$ = create_ternary(IF, $3, $5, $7); }
+        ;
+
+unary_expr : unop expr { $$ = create_unary($1, $2); }
            ;
 
-literal : INT   { $$ = create_int_literal(yylval.int_val); }
-        | TRUE  { $$ = create_bool_literal(1); }
-        | FALSE { $$ = create_bool_literal(0); }
-        | FLOAT { $$ = create_float_literal(yylval.float_val); }
-        | CHAR  { $$ = create_char_literal(yylval.char_val); }
-        ;
+unop : BANG  { $$ = BANG; }
+     | MINUS { $$ = MINUS; }
+     ;
+
+binary_expr : expr binop expr { $$ = create_binary($2, $1, $3); }
+            ;
 
 binop : AND   { $$ = AND; }
       | OR    { $$ = OR; }
@@ -88,9 +119,13 @@ binop : AND   { $$ = AND; }
       | FORWARD_SLASH { $$ = FORWARD_SLASH; }
       ;
 
-unop : BANG   { $$ = BANG; }
-     | MINUS  { $$ = MINUS; }
-     ;
+literal : INT   { $$ = create_int_literal(yylval.int_val); }
+        | TRUE  { $$ = create_bool_literal(1); }
+        | FALSE { $$ = create_bool_literal(0); }
+        | FLOAT { $$ = create_float_literal(yylval.float_val); }
+        | CHAR  { $$ = create_char_literal(yylval.char_val); }
+        | IDENTIFIER { $$ = create_identifier(yylval.id); }
+        ;
 %%
 
 #ifndef EBUG_BISON
@@ -107,20 +142,22 @@ int main(int argc, char **argv) {
     if (fp) yyin = fp;
   }
 
+
+  int parse_result = yyparse();
+
   // Parse the input
-  if (yyparse() == 0) {
+  if (parse_result == 0) {
     printf("Program:\n");
     pprint_ast(prog_start, 0);
   } else {
     printf("Parse failed.\n");
   }
 
-
   if (fp != NULL) {
     fclose(fp);
   }
 
-  return 0;
+  return parse_result;
 }
 
 #endif

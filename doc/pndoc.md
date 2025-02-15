@@ -22,9 +22,9 @@ The concrete syntax for **pnda** is fairly simple. I've seperated expressions in
 
 ```
 prog          -> decl*
-decl          -> let_stmt | fn_stmt | block | expr ';' 
-let_stmt      -> 'let' IDENTIFIER ('=' expr)? ';'
-fn_stmt       -> 'fn' IDENTIFIER '(' fn_params? ')' block
+decl          -> let_stmt | fn_stmt | expr ';'
+let_stmt      -> 'let' IDENTIFIER '=' (expr | fn_stmt) ';'
+fn_stmt       -> concrete_type 'fn' '(' fn_params? ')' block
 fn_params     -> arg (',' arg)*
 arg           -> IDENTIFIER concrete_type
 concrete_type -> 'int' | 'float' | 'char' | 'bool'
@@ -47,6 +47,8 @@ arguments     -> expr (',' expr)*
 ```
 
 # Evaluation Semantics
+
+TBD...
 
 # Reference & Notes
 

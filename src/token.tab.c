@@ -12,7 +12,6 @@ char* type_to_str(int type) {
     case RIGHT_BRACE: return "RIGHT_BRACE";
 
     // Special Characters
-    case DOT: return "DOT";
     case COMMA: return "COMMA";
     case SEMICOLON: return "SEMICOLON";
 
@@ -62,8 +61,6 @@ char* type_to_str(int type) {
     case FALSE: return "FALSE";
     case LET: return "LET";
     case FUNC: return "FUNC";
-    case RETURN: return "RETURN";
-    case EOL: return "EOF";
   }
 
   return "UNKNOWN";
@@ -78,9 +75,6 @@ int match_keyword(const char *str) {
     return TRUE;
   } else if (strcmp(str, "false") == 0) {
     return FALSE;
-  /*
-  } else if (strcmp(str, "return") == 0) {
-    return RETURN;
   } else if (strcmp(str, "let") == 0) {
     return LET;
   } else if (strcmp(str, "fn") == 0) {
@@ -93,7 +87,6 @@ int match_keyword(const char *str) {
     return CHAR_T;
   } else if (strcmp(str, "bool") == 0) {
     return BOOL_T;
-  */
   }
 
   return IDENTIFIER;

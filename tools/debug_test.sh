@@ -17,5 +17,5 @@ for file in $(ls ./tests); do
   fi
 done
 
-echo "Tests PASSED"
+printf "Tests PASSED\n"
 

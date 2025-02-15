@@ -17,7 +17,6 @@ int last_token = 0; // Store last parsed token
 "{"  { return LEFT_BRACE; }
 "}"  { return RIGHT_BRACE; }
 
-"."  { return DOT; }
 ","  { return COMMA; }
 ";"  { return SEMICOLON; }
 
