@@ -42,7 +42,7 @@ int last_token = 0; // Store last parsed token
 
 "="  { return EQUAL; }
 
-<<EOF>> { return EOF; }
+<<EOF>> { return YYEOF; }
 
 "//".*|\/\*(.|\n)*?\*\/ /* Ignore comments */
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
   }
 
   int tok = yylex();
-  while (tok != EOF) {
+  while (tok != YYEOF) {
     switch (tok) {
       case IDENTIFIER:
         printf("IDENTIFIER: %s\n", yylval.id);

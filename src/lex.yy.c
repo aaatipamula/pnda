@@ -911,7 +911,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 #line 45 "src/pnda.l"
-{ return EOF; }
+{ return YYEOF; }
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
@@ -1991,7 +1991,7 @@ int main(int argc, char **argv) {
   }
 
   int tok = yylex();
-  while (tok != EOF) {
+  while (tok != YYEOF) {
     switch (tok) {
       case IDENTIFIER:
         printf("IDENTIFIER: %s\n", yylval.id);

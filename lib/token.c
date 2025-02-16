@@ -62,7 +62,7 @@ char* type_to_str(token_type type) {
     case LET: return "LET";
     case FUNC: return "FUNC";
     case RETURN: return "RETURN";
-    case EOL: return "EOF";
+    case YYEOF: return "EOF";
   }
 
   return NULL;

@@ -14,6 +14,7 @@ char* type_to_str(int type) {
     // Special Characters
     case COMMA: return "COMMA";
     case SEMICOLON: return "SEMICOLON";
+    case YYEOF: return "EOF";
 
     // Arethmetic Operators
     case STAR: return "STAR";

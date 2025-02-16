@@ -27,9 +27,8 @@ ast* prog_start;
 %token <token> IF ELSE TRUE FALSE 
 %token <token> LEFT_BRACE RIGHT_BRACE 
 %token <token> COMMA SEMICOLON
-%token <token> EQUAL
 %token <token> INT_T FLOAT_T CHAR_T BOOL_T
-%token <token> FUNC LET APP
+%token <token> FUNC APP EQUAL LET
 %token <token> SEQ
 
 %token <node> INT CHAR FLOAT IDENTIFIER
@@ -46,7 +45,7 @@ ast* prog_start;
 
 %type <node>  expr if_expr binary_expr unary_expr literal 
 %type <node>  fn_expr fn_args block decls decl let_stmt
-%type <token> binop unop concrete_type
+%type <token> binop unop concrete_type sep
 
 %start prog
 
@@ -59,8 +58,11 @@ decls : { $$ = NULL; }
       ;
 
 decl : let_stmt | fn_expr
-     | expr SEMICOLON { $$ = $1; }
+     | expr sep { $$ = $1; }
      ;
+
+sep : YYEOF | SEMICOLON 
+    ;
 
 let_stmt : LET IDENTIFIER EQUAL expr SEMICOLON { $$ = create_let($2, $4); }
          ;
