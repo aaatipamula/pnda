@@ -62,6 +62,7 @@ char* type_to_str(int type) {
     case FALSE: return "FALSE";
     case LET: return "LET";
     case FUNC: return "FUNC";
+    case SEQ: return "SEQ";
   }
 
   return "UNKNOWN";

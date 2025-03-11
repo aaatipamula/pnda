@@ -54,10 +54,11 @@ prog : decls { prog_start = $1; }
      ;
 
 decls : { $$ = NULL; }
-      | decls decl { $$ = create_binary(SEQ, $1, $2); }
+      /* If the first node is NULL we don't need sequencing */
+      | decls decl { $$ = $1 ? create_binary(SEQ, $1, $2) : $2; }
       ;
 
-decl : let_stmt | fn_expr
+decl : let_stmt
      | expr sep { $$ = $1; }
      ;
 
@@ -82,7 +83,7 @@ concrete_type : INT_T   { $$ = INT_T; }
 
 block : LEFT_BRACE decls RIGHT_BRACE { $$ = $2; }
 
-expr : if_expr | binary_expr | unary_expr | literal
+expr : if_expr | binary_expr | unary_expr | literal | fn_expr
      | LEFT_PAREN expr RIGHT_PAREN { $$ = $2; }
      | fn_expr expr { $$ = create_binary(APP, $1, $2); }
      ;
@@ -140,15 +141,14 @@ int main(int argc, char **argv) {
     if (fp) yyin = fp;
   }
 
-
   int parse_result = yyparse();
 
   // Parse the input
   if (parse_result == 0) {
-    printf("Program:\n");
+    printf("\nProgram:\n");
     pprint_ast(prog_start, 0);
   } else {
-    printf("Parse failed.\n");
+    printf("\nParse failed.\n");
   }
 
   if (fp != NULL) {

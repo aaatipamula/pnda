@@ -1,5 +1,6 @@
 # Usage:
 # make        # Compile all binaries
+# make test   # Compile test binaries and run tests
 
 # Compiler and Flags
 CC := gcc
