@@ -64,8 +64,8 @@ int last_token = 0; // Store last parsed token
 . { fprintf(stderr, "Invalid lexeme: %s\n", yytext); yyterminate(); } /* Theoretically unused rule */
 %%
 
-#ifndef EBUG_FLEX
-#define EBUG_FLEX
+#ifdef  DEBUG_FLEX
+#define DEBUG_FLEX
 
 #include <stdio.h>
 

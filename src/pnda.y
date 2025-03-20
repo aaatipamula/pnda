@@ -24,7 +24,7 @@ ast* prog_start;
 }
 
 %token <token> LEFT_PAREN RIGHT_PAREN 
-%token <token> IF ELSE TRUE FALSE 
+%token <token> IF ELSE TRUE FALSE
 %token <token> LEFT_BRACE RIGHT_BRACE 
 %token <token> COMMA SEMICOLON
 %token <token> INT_T FLOAT_T CHAR_T BOOL_T
@@ -127,8 +127,8 @@ literal : INT   { $$ = create_int_literal(yylval.int_val); }
         ;
 %%
 
-#ifndef EBUG_BISON
-#define EBUG_BISON
+#ifdef  DEBUG_BISON
+#define DEBUG_BISON
 
 int main(int argc, char **argv) {
 

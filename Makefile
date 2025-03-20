@@ -75,8 +75,8 @@ $(TARGET): $(BIN_DIR) $(OBJS)
 
 test_bins: $(BIN_DIR) $(LEX_C) $(YACC_C)
 	@echo "Generating test binaries..."
-	$(CC) $(CFLAGS) -DEBUG_FLEX $(LEX_C) $(YACC_C) ./src/token.tab.c ./src/ast.c -o $(BIN_DIR)/debug_parse
-	$(CC) $(CFLAGS) -DEBUG_BISON $(LEX_C) $(YACC_C) ./src/token.tab.c ./src/ast.c -o $(BIN_DIR)/debug_lex
+	$(CC) $(CFLAGS) -DDEBUG_BISON $(LEX_C) $(YACC_C) ./src/token.tab.c ./src/ast.c -o $(BIN_DIR)/debug_parse
+	$(CC) $(CFLAGS) -DDEBUG_FLEX $(LEX_C) $(YACC_C) ./src/token.tab.c ./src/ast.c -o $(BIN_DIR)/debug_lex
 
 test: test_bins
 	@echo "Testing..."
